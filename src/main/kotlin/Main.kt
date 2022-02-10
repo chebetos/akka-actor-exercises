@@ -1,10 +1,5 @@
-
-import akka.actor.typed.ActorRef
 import akka.actor.typed.ActorSystem
-import akka.actor.typed.javadsl.AskPattern
-import me.chebetos.akka.primes.ManagerBehavior
-import java.math.BigInteger
-import java.time.Duration
+import me.chebetos.akka.racing.simulator.RaceController
 
 fun main(args: Array<String>) {
     println("Hello!")
@@ -18,23 +13,25 @@ fun main(args: Array<String>) {
 //    actorSystem.tell("Hello are you there?")
 //    actorSystem.tell("This is the 2nd message?")
 
-    val bigPrimes = ActorSystem.create(ManagerBehavior.create(), "BigPrimes")
-    val result = AskPattern.ask(
-        bigPrimes,
-        { me: ActorRef<MutableSet<BigInteger>> -> ManagerBehavior.InstructionCommand(message = "start", sender = me)},
-        Duration.ofSeconds(60),
-        bigPrimes.scheduler()
-    )
-    result.whenComplete { reply, _ ->
-        if (reply != null) {
-            reply.forEach {
-                println(it)
-            }
-        } else {
-            println("The system doesn't response in time")
-        }
-        bigPrimes.terminate()
-    }
+//    val bigPrimes = ActorSystem.create(ManagerBehavior.create(), "BigPrimes")
+//    val result = AskPattern.ask(
+//        bigPrimes,
+//        { me: ActorRef<MutableSet<BigInteger>> -> ManagerBehavior.InstructionCommand(message = "start", sender = me)},
+//        Duration.ofSeconds(60),
+//        bigPrimes.scheduler()
+//    )
+//    result.whenComplete { reply, _ ->
+//        if (reply != null) {
+//            reply.forEach {
+//                println(it)
+//            }
+//        } else {
+//            println("The system doesn't response in time")
+//        }
+//        bigPrimes.terminate()
+//    }
+    val raceControllerSystem = ActorSystem.create(RaceController.create(), "RaceControllerSystem")
+    raceControllerSystem.tell(RaceController.StartCommand(start = System.currentTimeMillis(), raceLength = 50))
 
     // Try adding program arguments via Run/Debug configuration.
     // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
