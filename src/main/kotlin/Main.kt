@@ -1,5 +1,5 @@
-import akka.actor.typed.ActorSystem
-import me.chebetos.akka.racing.simulator.RaceController
+
+import me.chebetos.akka.blockchain.BlockChainMiner
 
 fun main(args: Array<String>) {
     println("Hello!")
@@ -30,8 +30,11 @@ fun main(args: Array<String>) {
 //        }
 //        bigPrimes.terminate()
 //    }
-    val raceControllerSystem = ActorSystem.create(RaceController.create(), "RaceControllerSystem")
-    raceControllerSystem.tell(RaceController.StartCommand(start = System.currentTimeMillis(), raceLength = 50))
+//    val raceControllerSystem = ActorSystem.create(RaceController.create(), "RaceControllerSystem")
+//    raceControllerSystem.tell(RaceController.StartCommand(start = System.currentTimeMillis(), raceLength = 50))
+
+    val miner = BlockChainMiner()
+    miner.mineBlocks()
 
     // Try adding program arguments via Run/Debug configuration.
     // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.

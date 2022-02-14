@@ -26,7 +26,7 @@ internal class MiningTest {
     fun testFailsIfNonceNotInRange() {
         val testActor = BehaviorTestKit.create(WorkerBehavior.create())
         val block = BlocksData.getNextBlock(0, "0")
-        val testInbox = TestInbox.create<HashResult>()
+        val testInbox = TestInbox.create<ManagerBehavior.Command>()
         val command = WorkerBehavior.Command(
             block = block, startNonce = 0, difficultyLevel = 5, controller = testInbox.ref
         )
@@ -43,7 +43,7 @@ internal class MiningTest {
     fun testMiningPassesIfNonceIsInRange() {
         val testActor = BehaviorTestKit.create(WorkerBehavior.create())
         val block = BlocksData.getNextBlock(0, "0")
-        val testInbox = TestInbox.create<HashResult>()
+        val testInbox = TestInbox.create<ManagerBehavior.Command>()
 
         val command = WorkerBehavior.Command(
             block = block, startNonce = 935000, difficultyLevel = 5, controller = testInbox.ref
@@ -63,6 +63,8 @@ internal class MiningTest {
             complete = true
         )
 
-        testInbox.expectMessage(expectedHashResult)
+        val expectedHashResultCommand = ManagerBehavior.HashResultCommand(expectedHashResult)
+
+        testInbox.expectMessage(expectedHashResultCommand)
     }
 }

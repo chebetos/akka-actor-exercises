@@ -2,6 +2,7 @@ package me.chebetos.akka.blockchain.actors
 
 import akka.actor.typed.ActorRef
 import akka.actor.typed.Behavior
+import akka.actor.typed.PostStop
 import akka.actor.typed.javadsl.AbstractBehavior
 import akka.actor.typed.javadsl.ActorContext
 import akka.actor.typed.javadsl.Behaviors
@@ -13,14 +14,17 @@ import java.io.Serializable
 import java.io.UnsupportedEncodingException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.time.Duration
+import java.time.Instant
 
 
 class WorkerBehavior private constructor(context: ActorContext<Command>) : AbstractBehavior<WorkerBehavior.Command>(context) {
+
     data class Command(
         val block: PartialBlock,
         val startNonce: Int,
         val difficultyLevel: Int,
-        val controller: ActorRef<HashResult>
+        val controller: ActorRef<ManagerBehavior.Command>
     ): Serializable
 
     companion object {
@@ -31,25 +35,38 @@ class WorkerBehavior private constructor(context: ActorContext<Command>) : Abstr
 
     private val logger = KotlinLogging.logger {}
 
+    private lateinit var startInstant : Instant
+
     override fun createReceive(): Receive<Command> = mineBlock()
 
     private fun mineBlock(): Receive<Command> =
         newReceiveBuilder()
             .onAnyMessage {
-                logger.info { "received command: $it"}
+                context.log.debug("received command: $it")
+                startInstant = Instant.now()
                 val hashResult = mineBlock(it.block, it.difficultyLevel, it.startNonce, it.startNonce + 1000)
-                if (hashResult != null) {
-                    context.log.info("${hashResult.nonce} : ${hashResult.hash}")
-                    it.controller.tell(hashResult)
-                } else {
-                    context.log.info("null")
+                if (hashResult == null) {
+                    context.log.debug("null")
+                    return@onAnyMessage Behaviors.stopped()
                 }
+                context.log.info("${hashResult.nonce} : ${hashResult.hash}")
+                it.controller.tell(ManagerBehavior.HashResultCommand(hashResult))
                 return@onAnyMessage Behaviors.same()
+            }
+            .onSignal(PostStop::class.java) { signal ->
+                val path = context.self.path()
+                val stopInstant = Instant.now()
+                if (!this::startInstant.isInitialized) {
+                    startInstant = Instant.now()
+                }
+                val workerDuration = Duration.between(startInstant, stopInstant)
+                context.log.debug("$path: I'm about to terminate!: $signal, I lived by $workerDuration")
+                return@onSignal Behaviors.same()
             }
             .build()
 
     private fun mineBlock(block: PartialBlock, difficultyLevel: Int, startNonce: Int, endNonce: Int): HashResult? {
-        logger.info { "Mining block with parameters: block=$block, difficultyLevel=$difficultyLevel, startNonce=$startNonce, endNonce=$endNonce" }
+        logger.debug { "Mining block with parameters: block=$block, difficultyLevel=$difficultyLevel, startNonce=$startNonce, endNonce=$endNonce" }
         val target = String(CharArray(difficultyLevel)).replace("\u0000", "0")
         var hash = String(CharArray(difficultyLevel)).replace("\u0000", "X")
         var nonce = startNonce
