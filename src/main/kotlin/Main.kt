@@ -1,10 +1,23 @@
+@file:OptIn(ExperimentalTime::class)
 
 import me.chebetos.akka.blockchain.BlockChainMiner
+import me.chebetos.akka.streams.SimpleStream
+import me.chebetos.akka.streams.primes.BigPrimes
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
 fun main(args: Array<String>) {
     println("Hello!")
     println("Program arguments: ${args.joinToString()}")
+    val duration = measureTime {
+        run(args)
+    }
+    println("Running the example takes: $duration")
+    // Try adding program arguments via Run/Debug configuration.
+    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
+}
 
+fun run(args: Array<String>) {
 //    val actorSystem = ActorSystem.create(me.chebetos.akka.simple.FirstSimpleBehavior.create(), "FirstActorSystem")
 //    actorSystem.tell("hello")
 //    actorSystem.tell("who")
@@ -33,9 +46,9 @@ fun main(args: Array<String>) {
 //    val raceControllerSystem = ActorSystem.create(RaceController.create(), "RaceControllerSystem")
 //    raceControllerSystem.tell(RaceController.StartCommand(start = System.currentTimeMillis(), raceLength = 50))
 
-    val miner = BlockChainMiner()
-    miner.mineBlocks()
+//    val miner = BlockChainMiner()
+//    miner.mineBlocks()
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
+    //SimpleStream.startStream()
+    BigPrimes.startStream()?.toCompletableFuture()?.get()
 }

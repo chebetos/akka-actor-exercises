@@ -108,6 +108,11 @@
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-stream-typed_${scala.binary.version}</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-actor-testkit-typed_${scala.binary.version}</artifactId>
             <scope>test</scope>
         </dependency>
