@@ -110,7 +110,11 @@
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-stream-typed_${scala.binary.version}</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.lightbend.akka</groupId>
+            <artifactId>akka-stream-alpakka-amqp_${scala.binary.version}</artifactId>
+            <version>3.0.4</version>
+        </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-actor-testkit-typed_${scala.binary.version}</artifactId>
