@@ -1,12 +1,15 @@
 @file:OptIn(ExperimentalTime::class)
 
+import com.typesafe.config.ConfigFactory
 import me.chebetos.akka.blockchain.BlockChainMiner
 import me.chebetos.akka.streams.SimpleStream
+import me.chebetos.akka.streams.ampq.AmpqStream
 import me.chebetos.akka.streams.positiontracker.PositionTracker
 import me.chebetos.akka.streams.primes.BigPrimes
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
+@OptIn(ExperimentalTime::class)
 fun main(args: Array<String>) {
     println("Hello!")
     println("Program arguments: ${args.joinToString()}")
@@ -52,6 +55,9 @@ fun run(args: Array<String>) {
 
     //SimpleStream.startStream()
     //BigPrimes.startStream()?.toCompletableFuture()?.get()
-    val speed = PositionTracker.startStream()?.toCompletableFuture()?.get()
-    println("Speed: $speed")
+    //val speed = PositionTracker.startStream()?.toCompletableFuture()?.get()
+    //println("Speed: $speed")
+
+    AmpqStream.writeStream()
+    AmpqStream.startStream()
 }
