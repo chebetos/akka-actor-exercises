@@ -2,6 +2,7 @@
 
 import me.chebetos.akka.blockchain.BlockChainMiner
 import me.chebetos.akka.streams.SimpleStream
+import me.chebetos.akka.streams.positiontracker.PositionTracker
 import me.chebetos.akka.streams.primes.BigPrimes
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
@@ -50,5 +51,7 @@ fun run(args: Array<String>) {
 //    miner.mineBlocks()
 
     //SimpleStream.startStream()
-    BigPrimes.startStream()?.toCompletableFuture()?.get()
+    //BigPrimes.startStream()?.toCompletableFuture()?.get()
+    val speed = PositionTracker.startStream()?.toCompletableFuture()?.get()
+    println("Speed: $speed")
 }
