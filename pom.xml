@@ -21,6 +21,7 @@
         <kotlin.libs.version>1.6.10</kotlin.libs.version>
         <scala.binary.version>2.13</scala.binary.version>
         <akka.version>2.6.18</akka.version>
+        <alpakka.version>3.0.4</alpakka.version>
     </properties>
 
     <build>
@@ -113,7 +114,7 @@
         <dependency>
             <groupId>com.lightbend.akka</groupId>
             <artifactId>akka-stream-alpakka-amqp_${scala.binary.version}</artifactId>
-            <version>3.0.4</version>
+            <version>${alpakka.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
