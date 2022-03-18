@@ -1,11 +1,6 @@
 @file:OptIn(ExperimentalTime::class)
 
-import com.typesafe.config.ConfigFactory
-import me.chebetos.akka.blockchain.BlockChainMiner
-import me.chebetos.akka.streams.SimpleStream
-import me.chebetos.akka.streams.ampq.AmpqStream
-import me.chebetos.akka.streams.positiontracker.PositionTracker
-import me.chebetos.akka.streams.primes.BigPrimes
+import me.chebetos.akka.streams.slickjdbc.SlickJdbcStream
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
@@ -58,6 +53,8 @@ fun run(args: Array<String>) {
     //val speed = PositionTracker.startStream()?.toCompletableFuture()?.get()
     //println("Speed: $speed")
 
-    AmpqStream.writeStream()
-    AmpqStream.startStream()
+    //AmpqStream.writeStream()
+    //AmpqStream.startStream()
+
+    SlickJdbcStream.executeInsertAndRead()
 }
