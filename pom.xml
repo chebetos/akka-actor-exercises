@@ -26,7 +26,7 @@
         <!-- akka properties -->
         <scala.binary.version>2.13</scala.binary.version>
         <akka.version>2.6.18</akka.version>
-        <alpakka.version>3.0.4</alpakka.version>
+        <alpakka.version>5.0.0</alpakka.version>
         <!-- additional dependencies version properties -->
         <log4j.version>2.17.1</log4j.version>
         <junit.version>5.8.2</junit.version>
